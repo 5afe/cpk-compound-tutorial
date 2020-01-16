@@ -29,6 +29,15 @@ const GlobalStyles = createGlobalStyle`
     font-family: 'Averta', sans-serif;
     margin: 0;
     padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  button {
+    background-color: #008c73 !important;
   }
 `
 
