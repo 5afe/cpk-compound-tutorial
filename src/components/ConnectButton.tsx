@@ -2,7 +2,11 @@ import * as React from "react"
 import Web3Connect from "web3connect"
 import WalletConnectProvider from "@walletconnect/web3-provider"
 
-const ConnectButton: React.FC = () => (
+type Props = {
+  onConnect: Function
+}
+
+const ConnectButton: React.FC<Props> = ({ onConnect }) => (
   <Web3Connect.Button
     network="rinkeby"
     providerOptions={{
@@ -13,9 +17,7 @@ const ConnectButton: React.FC = () => (
         }
       }
     }}
-    onConnect={() => {
-      // const web3 = new Web3(provider); // add provider to web3
-    }}
+    onConnect={onConnect}
     onClose={() => {
       console.log("Web3Connect Modal Closed") // modal has closed
     }}
