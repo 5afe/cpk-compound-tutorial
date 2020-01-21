@@ -11,9 +11,9 @@ const ConnectButton: React.FC<Props> = ({ onConnect }) => (
     network="rinkeby"
     providerOptions={{
       walletconnect: {
-        package: WalletConnectProvider, // required
+        package: WalletConnectProvider,
         options: {
-          infuraId: "INFURA_ID" // required
+          infuraId: 'b42c928da8fd4c1f90374b18aa9ac6ba'
         }
       }
     }}
