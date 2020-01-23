@@ -1,6 +1,7 @@
 import React, { useEffect } from "react"
 import Web3 from "web3"
 import styled from "styled-components"
+import CPK from 'contract-proxy-kit'
 import ConnectButton from "src/components/ConnectButton"
 import useCustomReducer from "src/hooks/useCustomReducer"
 import WalletInfo from "src/components/WalletInfo"
@@ -26,6 +27,7 @@ const initialWalletState = {
 
 const App: React.FC = () => {
   const [web3, setWeb3] = React.useState<any>(undefined)
+  const [proxyKit, setProxyKit] = React.useState<any>(undefined)
   const [walletState, updateWalletState] = useCustomReducer<IWalletState>(
     initialWalletState
   )
@@ -43,6 +45,8 @@ const App: React.FC = () => {
         web3.eth.net.getId()
       ])
 
+      setProxyKit(await CPK.create({web3}))
+
       updateWalletState({
         account: accounts[0],
         networkId
@@ -53,6 +57,8 @@ const App: React.FC = () => {
       fetchWalletData()
     }
   }, [updateWalletState, web3])
+
+  console.log(proxyKit)
 
   return (
     <SAppContainer>
