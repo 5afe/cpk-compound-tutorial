@@ -1,18 +1,34 @@
-import React from "react"
+import React, { useEffect } from "react"
 import Web3 from "web3"
 import styled from "styled-components"
 import ConnectButton from "src/components/ConnectButton"
+import useCustomReducer from "src/hooks/useCustomReducer"
+import WalletInfo from "src/components/WalletInfo"
 import SafeLogo from "src/assets/icons/safe-logo.svg"
 
-const SAppContainer = styled.div`
+const SAppContainer = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  max-width: 100vw;
 `
+
+interface IWalletState {
+  account: string | undefined
+  networkId: number | undefined
+}
+
+const initialWalletState = {
+  account: undefined,
+  networkId: undefined
+}
 
 const App: React.FC = () => {
   const [web3, setWeb3] = React.useState<any>(undefined)
+  const [walletState, updateWalletState] = useCustomReducer<IWalletState>(
+    initialWalletState
+  )
 
   const onWeb3Connect = (provider: any) => {
     if (provider) {
@@ -20,15 +36,35 @@ const App: React.FC = () => {
     }
   }
 
+  useEffect(() => {
+    const fetchWalletData = async () => {
+      const [accounts, networkId] = await Promise.all([
+        web3.eth.getAccounts(),
+        web3.eth.net.getId()
+      ])
+
+      updateWalletState({
+        account: accounts[0],
+        networkId
+      })
+    }
+
+    if (web3) {
+      fetchWalletData()
+    }
+  }, [updateWalletState, web3])
+
   return (
     <SAppContainer>
       <img src={SafeLogo} alt="Gnosis Safe Logo" width="100"></img>
       <h1>Safe Contract Proxy Kit Compound Example</h1>
-      <p>Start by connecting your wallet using button below.</p>
       {!web3 ? (
-        <ConnectButton onConnect={onWeb3Connect} />
+        <>
+          <p>Start by connecting your wallet using button below.</p>
+          <ConnectButton onConnect={onWeb3Connect} />
+        </>
       ) : (
-        "Connected provider."
+        <WalletInfo address={walletState.account!} />
       )}
     </SAppContainer>
   )
