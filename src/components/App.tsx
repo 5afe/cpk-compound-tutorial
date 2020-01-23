@@ -3,13 +3,15 @@ import Web3 from "web3"
 import styled from "styled-components"
 import ConnectButton from "src/components/ConnectButton"
 import useCustomReducer from "src/hooks/useCustomReducer"
+import WalletInfo from "src/components/WalletInfo"
 import SafeLogo from "src/assets/icons/safe-logo.svg"
 
-const SAppContainer = styled.div`
+const SAppContainer = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  max-width: 100vw;
 `
 
 interface IWalletState {
@@ -62,7 +64,7 @@ const App: React.FC = () => {
           <ConnectButton onConnect={onWeb3Connect} />
         </>
       ) : (
-        walletState.account
+        <WalletInfo address={walletState.account!} />
       )}
     </SAppContainer>
   )
