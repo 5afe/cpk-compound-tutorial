@@ -12,6 +12,7 @@
     "@types/react-dom": "^16.9.0",
     "@types/styled-components": "^4.4.2",
     "@walletconnect/web3-provider": "^1.0.0-beta.44",
+    "contract-proxy-kit": "^1.0.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-scripts": "3.3.0",
