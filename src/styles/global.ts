@@ -39,6 +39,10 @@ const GlobalStyles = createGlobalStyle`
   button {
     background-color: #008c73 !important;
   }
+
+  .walletconnect-qrcode__base {
+    left: 0;
+  }
 `
 
 export default GlobalStyles
