@@ -4,10 +4,12 @@ import BigNumber from "bignumber.js"
 import { TabNavigation, Tab, Paragraph, TextInput, Button } from "evergreen-ui"
 import cERC20Abi from "src/abis/CErc20.json"
 import { CDAI_ADDRESS, DAI_ADDRESS } from "src/contracts"
+import CPK from "contract-proxy-kit"
 
 interface ICompoundForm {
   web3: any
   address: string
+  cpk: CPK
 }
 
 type CompoundOperation = "invest" | "withdraw"
@@ -22,7 +24,10 @@ const SContainer = styled.div`
   margin-top: 25px;
 `
 
-const CompoundForm: React.FC<ICompoundForm> = ({ web3, address }) => {
+const formatNumber = (value: number) =>
+  new BigNumber(value).div(DECIMALS_18).toFixed(4)
+
+const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
   const dai = useMemo(() => new web3.eth.Contract(cERC20Abi, DAI_ADDRESS), [
     web3
   ])
@@ -35,6 +40,7 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address }) => {
   const [cDaiSupplyAPR, setCDaiSupplyAPR] = useState<string>("0")
   const [daiBalance, setDaiBalance] = useState<number>(0)
   const [cDaiLocked, setCDaiLocked] = useState<number>(0)
+  const [daiInputAmount, setDaiInputAmount] = useState<string>("")
 
   React.useEffect(() => {
     const getData = async () => {
@@ -67,11 +73,11 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address }) => {
       </Paragraph>
       <Paragraph>
         <b>DAI BALANCE: </b>
-        {daiBalance}
+        {formatNumber(daiBalance)}
       </Paragraph>
       <Paragraph>
         <b>DAI LOCKED: </b>
-        {cDaiLocked}
+        {formatNumber(cDaiLocked)}
       </Paragraph>
 
       <TabNavigation marginTop="20px">
@@ -86,9 +92,17 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address }) => {
           </Tab>
         ))}
       </TabNavigation>
-      <TextInput name="daiAmount" placeholder="DAI Amount" marginTop="20px" />
+      <TextInput
+        name="daiAmount"
+        placeholder="DAI Amount"
+        marginTop="20px"
+        value={daiInputAmount}
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          setDaiInputAmount(event.target.value)
+        }}
+      />
       <Button appearance="primary" intent="success" marginTop="10px">
-        Invest
+        {userOperation === "invest" ? "Invest" : "Withdraw"}
       </Button>
     </SContainer>
   )
