@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react"
+import React, { useMemo, useState, useCallback } from "react"
 import styled from "styled-components"
 import BigNumber from "bignumber.js"
 import { TabNavigation, Tab, Paragraph, TextInput, Button } from "evergreen-ui"
@@ -42,28 +42,55 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
   const [cDaiLocked, setCDaiLocked] = useState<number>(0)
   const [daiInputAmount, setDaiInputAmount] = useState<string>("")
 
-  React.useEffect(() => {
-    const getData = async () => {
-      // supplyRate
-      const cDaiSupplyRate = await cDai.methods.supplyRatePerBlock().call()
-      const res = new BigNumber(cDaiSupplyRate)
-        .times(BLOCKS_PER_YEAR)
-        .div(DECIMALS_18)
-        .times(100)
-        .toFixed(2)
-      setCDaiSupplyAPR(res)
+  const getData = useCallback(async () => {
+    // supplyRate
+    const cDaiSupplyRate = await cDai.methods.supplyRatePerBlock().call()
+    const res = new BigNumber(cDaiSupplyRate)
+      .times(BLOCKS_PER_YEAR)
+      .div(DECIMALS_18)
+      .times(100)
+      .toFixed(2)
+    setCDaiSupplyAPR(res)
 
-      // dai Balance
-      const daiBalance = await dai.methods.balanceOf(address).call()
-      setDaiBalance(daiBalance)
+    // dai Balance
+    const daiBalance = await dai.methods.balanceOf(address).call()
+    setDaiBalance(daiBalance)
 
-      // dai Locked
-      const daiLocked = await cDai.methods.balanceOfUnderlying(address).call()
-      setCDaiLocked(daiLocked)
+    // dai Locked
+    const daiLocked = await cDai.methods.balanceOfUnderlying(address).call()
+    setCDaiLocked(daiLocked)
+  }, [address, cDai.methods, dai.methods])
+
+  const lockDai = async () => {
+    if (!daiInputAmount) {
+      return
     }
 
+    const amount = web3.eth.abi.encodeParameter("uint256", daiInputAmount)
+    const txs = [
+      {
+        operation: CPK.CALL,
+        to: DAI_ADDRESS,
+        value: 0,
+        data: dai.methods.approve(CDAI_ADDRESS, amount).encodeABI()
+      },
+      {
+        operation: CPK.CALL,
+        to: CDAI_ADDRESS,
+        value: 0,
+        data: cDai.methods.mint(amount).encodeABI()
+      }
+    ]
+
+    await cpk.execTransactions(txs)
+
     getData()
-  }, [address, cDai, dai])
+  }
+
+
+  React.useEffect(() => {
+    getData()
+  }, [address, cDai, dai, getData])
 
   return (
     <SContainer>
@@ -101,7 +128,12 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
           setDaiInputAmount(event.target.value)
         }}
       />
-      <Button appearance="primary" intent="success" marginTop="10px">
+      <Button
+        appearance="primary"
+        intent="success"
+        marginTop="10px"
+        onClick={lockDai}
+      >
         {userOperation === "invest" ? "Invest" : "Withdraw"}
       </Button>
     </SContainer>
