@@ -59,6 +59,7 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
     // dai Locked
     const daiLocked = await cDai.methods.balanceOfUnderlying(address).call()
     setCDaiLocked(daiLocked)
+
   }, [address, cDai.methods, dai.methods])
 
   const lockDai = async () => {
@@ -66,19 +67,20 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
       return
     }
 
-    const amount = web3.eth.abi.encodeParameter("uint256", daiInputAmount)
+    const daiAmount = new BigNumber(daiInputAmount).times(DECIMALS_18).toString()
+
     const txs = [
       {
         operation: CPK.CALL,
         to: DAI_ADDRESS,
         value: 0,
-        data: dai.methods.approve(CDAI_ADDRESS, amount).encodeABI()
+        data: dai.methods.approve(CDAI_ADDRESS, daiAmount).encodeABI()
       },
       {
         operation: CPK.CALL,
         to: CDAI_ADDRESS,
         value: 0,
-        data: cDai.methods.mint(amount).encodeABI()
+        data: cDai.methods.mint(daiAmount).encodeABI()
       }
     ]
 
