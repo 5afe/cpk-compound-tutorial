@@ -57,10 +57,10 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
     setDaiBalance(daiBalance)
 
     // dai Locked
-    const daiLocked = await cDai.methods.balanceOfUnderlying(address).call()
+    const daiLocked = await cDai.methods.balanceOfUnderlying(cpk.address).call()
     setCDaiLocked(daiLocked)
 
-  }, [address, cDai.methods, dai.methods])
+  }, [address, cDai.methods, cpk.address, dai.methods])
 
   const lockDai = async () => {
     if (!daiInputAmount) {
@@ -68,6 +68,8 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
     }
 
     const daiAmount = new BigNumber(daiInputAmount).times(DECIMALS_18).toString()
+
+    await dai.methods.transfer(cpk.address, daiAmount).send({ from: address })
 
     const txs = [
       {
