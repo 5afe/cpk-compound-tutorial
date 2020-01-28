@@ -59,8 +59,6 @@ const App: React.FC = () => {
     }
   }, [updateWalletState, web3])
 
-  console.log(proxyKit)
-
   return (
     <SAppContainer>
       <img src={SafeLogo} alt="Gnosis Safe Logo" width="100"></img>
