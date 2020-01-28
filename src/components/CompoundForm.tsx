@@ -24,6 +24,14 @@ const SContainer = styled.div`
   margin-top: 25px;
 `
 
+const SMobileLineBreak = styled.br`
+  display: none;
+
+  @media screen and (max-width: 768px) {
+    display: initial;
+  }
+`
+
 const formatNumber = (value: number) =>
   new BigNumber(value).div(DECIMALS_18).toFixed(4)
 
@@ -131,6 +139,11 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
 
   return (
     <SContainer>
+      <Paragraph textAlign="left">
+        <b>PROXY ADDRESS: </b>
+        <SMobileLineBreak />
+        {cpk.address}
+      </Paragraph>
       <Paragraph>
         <b>DAI APR: </b>
         {cDaiSupplyAPR}
