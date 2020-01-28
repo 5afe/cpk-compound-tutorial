@@ -1,8 +1,10 @@
 import React, { useEffect } from "react"
 import Web3 from "web3"
 import styled from "styled-components"
+import CPK from "contract-proxy-kit"
 import ConnectButton from "src/components/ConnectButton"
 import useCustomReducer from "src/hooks/useCustomReducer"
+import CompoundForm from "src/components/CompoundForm"
 import WalletInfo from "src/components/WalletInfo"
 import SafeLogo from "src/assets/icons/safe-logo.svg"
 
@@ -26,6 +28,7 @@ const initialWalletState = {
 
 const App: React.FC = () => {
   const [web3, setWeb3] = React.useState<any>(undefined)
+  const [proxyKit, setProxyKit] = React.useState<CPK | undefined>(undefined)
   const [walletState, updateWalletState] = useCustomReducer<IWalletState>(
     initialWalletState
   )
@@ -43,6 +46,8 @@ const App: React.FC = () => {
         web3.eth.net.getId()
       ])
 
+      setProxyKit(await CPK.create({ web3 }))
+
       updateWalletState({
         account: accounts[0],
         networkId
@@ -54,17 +59,26 @@ const App: React.FC = () => {
     }
   }, [updateWalletState, web3])
 
+  console.log(proxyKit)
+
   return (
     <SAppContainer>
       <img src={SafeLogo} alt="Gnosis Safe Logo" width="100"></img>
       <h1>Safe Contract Proxy Kit Compound Example</h1>
-      {!web3 ? (
+      {walletState.account && proxyKit ? (
+        <div>
+          <WalletInfo address={walletState.account!} />
+          <CompoundForm
+            web3={web3}
+            cpk={proxyKit!}
+            address={walletState.account!}
+          />
+        </div>
+      ) : (
         <>
           <p>Start by connecting your wallet using button below.</p>
           <ConnectButton onConnect={onWeb3Connect} />
         </>
-      ) : (
-        <WalletInfo address={walletState.account!} />
       )}
     </SAppContainer>
   )

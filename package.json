@@ -6,20 +6,23 @@
     "@testing-library/jest-dom": "5.0.2",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "8.0.4",
-    "@types/jest": "^24.0.0",
-    "@types/node": "13.1.8",
+    "@types/jest": "24.9.1",
+    "@types/node": "13.5.0",
     "@types/react": "16.9.19",
     "@types/react-dom": "16.9.5",
     "@types/styled-components": "^4.4.2",
     "@walletconnect/web3-provider": "^1.0.0-beta.44",
+    "bignumber.js": "^9.0.0",
+    "contract-proxy-kit": "^1.0.0",
     "ethereum-blockies-base64": "^1.0.2",
+    "evergreen-ui": "^4.22.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-scripts": "3.3.0",
     "styled-components": "^5.0.0",
     "styled-normalize": "^8.0.6",
     "typescript": "3.7.5",
-    "web3": "^1.2.4",
+    "web3": "1.2.5",
     "web3connect": "^1.0.0-beta.25"
   },
   "scripts": {
@@ -42,5 +45,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/contract-proxy-kit": "^1.0.0"
   }
 }
