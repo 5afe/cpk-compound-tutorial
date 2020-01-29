@@ -5,6 +5,10 @@ import styled from "styled-components"
 const SContainer = styled.div`
   display: flex;
   align-items: center;
+
+  @media screen and (max-width: 768px) {
+    font-size: 11px;
+  }
 `
 
 const SImg = styled.img`

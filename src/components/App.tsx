@@ -16,6 +16,12 @@ const SAppContainer = styled.main`
   max-width: 100vw;
 `
 
+const SHeading = styled.h1`
+  @media screen and (max-width: 768px) {
+    font-size: 1.2em;
+  }
+`
+
 interface IWalletState {
   account: string | undefined
   networkId: number | undefined
@@ -59,12 +65,10 @@ const App: React.FC = () => {
     }
   }, [updateWalletState, web3])
 
-  console.log(proxyKit)
-
   return (
     <SAppContainer>
       <img src={SafeLogo} alt="Gnosis Safe Logo" width="100"></img>
-      <h1>Safe Contract Proxy Kit Compound Example</h1>
+      <SHeading>Safe Contract Proxy Kit Compound Example</SHeading>
       {walletState.account && proxyKit ? (
         <div>
           <WalletInfo address={walletState.account!} />
