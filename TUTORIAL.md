@@ -120,7 +120,7 @@ const App: React.FC = () => {
 
 ## Using CPK instance to invest DAI into Compound
 
-Now we need to initialize the DAI and Compound DAI token contracts, the ABI can be found [here](https://github.com/gnosis/cpk-compound-example/blob/master/src/abis/CErc20.json):
+First we need to initialize the DAI and Compound DAI token contracts instances, the ABI can be found [here](https://github.com/gnosis/cpk-compound-example/blob/master/src/abis/CErc20.json):
 
 ```jsx
 import React, { useMemo } from "react"
@@ -149,3 +149,40 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
   return <div />
 }
 ```
+
+Let's write a function that will fetch the data required for investment calculations and save them into our state variables:
+
+```jsx
+import React, { useState } from "react"
+import BigNumber from "bignumber.js"
+
+const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
+  ...
+  const [cDaiSupplyAPR, setCDaiSupplyAPR] = useState<string>("0")
+  const [daiBalance, setDaiBalance] = useState<number>(0)
+  const [cDaiLocked, setCDaiLocked] = useState<number>(0)
+
+  const getData = async () => {
+    // supply rate
+    const cDaiSupplyRate = await cDai.methods.supplyRatePerBlock().call()
+    const res = new BigNumber(cDaiSupplyRate)
+      .times(BLOCKS_PER_YEAR)
+      .div(DECIMALS_18)
+      .times(100)
+      .toFixed(2)
+    setCDaiSupplyAPR(res)
+
+    // dai Balance of user's connected wallet
+    const daiBalance = await dai.methods.balanceOf(address).call()
+    setDaiBalance(daiBalance)
+
+    // current dai locked 
+    const daiLocked = await cDai.methods.balanceOfUnderlying(cpk.address).call()
+    setCDaiLocked(daiLocked)
+  }
+  ...
+  return <div />
+}
+```
+
+Notice that in daiLocked we use the address of a proxy, proxy contract will be deployed when you first initiate the transaction with it, but the address is still available by accessing `address` property of the CPK instance.
