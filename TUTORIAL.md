@@ -123,29 +123,29 @@ const App: React.FC = () => {
 Now we need to initialize the DAI and Compound DAI token contracts, the ABI can be found [here](https://github.com/gnosis/cpk-compound-example/blob/master/src/abis/CErc20.json):
 
 ```jsx
-  import React, { useMemo } from "react"
-  import cERC20Abi from "src/abis/CErc20.json"
+import React, { useMemo } from "react"
+import cERC20Abi from "src/abis/CErc20.json"
 
-  interface ICompoundForm {
-    web3: any
-    address: string
-    cpk: CPK
-  }
+interface ICompoundForm {
+  web3: any
+  address: string
+  cpk: CPK
+}
 
-  const DAI_ADDRESS = '0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa'
-  const CDAI_ADDRESS = '0x6D7F0754FFeb405d23C51CE938289d4835bE3b14'
+const DAI_ADDRESS = '0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa'
+const CDAI_ADDRESS = '0x6D7F0754FFeb405d23C51CE938289d4835bE3b14'
 
-  const BLOCKS_PER_YEAR = (365.25 * 24 * 3600) / 15
-  const DECIMALS_18 = 10 ** 18
+const BLOCKS_PER_YEAR = (365.25 * 24 * 3600) / 15
+const DECIMALS_18 = 10 ** 18
 
-  const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
-    const dai = useMemo(() => new web3.eth.Contract(cERC20Abi, DAI_ADDRESS), [
-      web3
-    ])
-    const cDai = useMemo(() => new web3.eth.Contract(cERC20Abi, CDAI_ADDRESS), [
-      web3
-    ])
+const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
+  const dai = useMemo(() => new web3.eth.Contract(cERC20Abi, DAI_ADDRESS), [
+    web3
+  ])
+  const cDai = useMemo(() => new web3.eth.Contract(cERC20Abi, CDAI_ADDRESS), [
+    web3
+  ])
 
-    return <div />
-  }
+  return <div />
+}
 ```
