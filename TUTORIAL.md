@@ -185,4 +185,4 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
 }
 ```
 
-Notice that in daiLocked we use the address of a proxy, proxy contract will be deployed when you first initiate the transaction with it, but the address is still available by accessing `address` property of the CPK instance.
+Notice that in `daiLocked` we use the address of a proxy, because in the result proxy will hold the locked funds. Proxy contract will be deployed when you first initiate the transaction with it, but the address is available by accessing `address` property of the CPK instance even when it's not deployed yet.
