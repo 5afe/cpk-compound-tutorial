@@ -118,7 +118,7 @@ const App: React.FC = () => {
 }
 ```
 
-## Using CPK instance to invest DAI into Compound
+## Fetching the necessary data from the blockchain
 
 First we need to initialize the DAI and Compound DAI token contracts instances, the ABI can be found [here](https://github.com/gnosis/cpk-compound-example/blob/master/src/abis/CErc20.json):
 
@@ -186,3 +186,5 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
 ```
 
 Notice that in `daiLocked` we use the address of a proxy, because in the result proxy will hold the locked funds. Proxy contract will be deployed when you first initiate the transaction with it, but the address is available by accessing `address` property of the CPK instance even when it's not deployed yet.
+
+## Using CPK instance to invest DAI into Compound
