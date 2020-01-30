@@ -1,3 +1,7 @@
+Tutorial can be found in [TUTORIAL.md](https://github.com/gnosis/contract-proxy-kit/blob/master/README.md)
+
+App can be found live here: http://green-summer.surge.sh/
+
 ## Available Scripts
 
 In the project directory, you can run:

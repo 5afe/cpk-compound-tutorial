@@ -188,3 +188,42 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
 Notice that in `daiLocked` we use the address of a proxy, because in the result proxy will hold the locked funds. Proxy contract will be deployed when you first initiate the transaction with it, but the address is available by accessing `address` property of the CPK instance even when it's not deployed yet.
 
 ## Using CPK instance to invest DAI into Compound
+
+First, we need to fund the proxy with the amount of DAI we want to invest:
+
+```jsx
+await dai.methods.transfer(cpk.address, daiAmount).send({ from: address })
+```
+
+Second, we need to prepare an array of transactions to execute for the Contract Proxy Kit:
+
+```jsx
+const txs = [
+      {
+        operation: CPK.CALL,
+        to: DAI_ADDRESS,
+        value: 0,
+        data: dai.methods.approve(CDAI_ADDRESS, daiAmount).encodeABI()
+      },
+      {
+        operation: CPK.CALL,
+        to: CDAI_ADDRESS,
+        value: 0,
+        data: cDai.methods.mint(daiAmount).encodeABI()
+      }
+    ]
+```
+
+And then we simply execute it by calling `execTransactions` on the CPK instance:
+
+```jsx
+await cpk.execTransactions(txs)
+```
+
+`execTransactions` will return an object with [promiEvent](https://web3js.readthedocs.io/en/v1.2.5/callbacks-promises-events.html#promievent) property you can use to subscribe for updates.
+
+## Useful links
+
+- [Contract Proxy Kit documentation](https://github.com/gnosis/contract-proxy-kit)
+- [Web3.js docs](https://web3js.readthedocs.io/)
+- [Source code for the example app](https://github.com/gnosis/cpk-compound-example)
