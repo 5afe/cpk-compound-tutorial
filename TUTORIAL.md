@@ -7,7 +7,7 @@ Gnosis Safe Proxy Kit is a smart contract on the Ethereum blockchain. There are 
 
 ## Background information
 
-Our example project will be a [React](reactjs.org) application bootstrapped with [create-react-app](https://github.com/facebook/create-react-app) which uses [Evergreen UI Kit](https://evergreen.segment.com/components/). We are also going to use [TypeScript](typescriptlang.org) as our language. For more information on those projects, visit their websites. We assume you are familiar with those technologies as our tutorial we'll only cover things you need to integrate the Gnosis Safe Contract Proxy kit and not, for example, how to setup a React project.
+Our example project will be a [React](https://reactjs.org) application bootstrapped with [create-react-app](https://github.com/facebook/create-react-app) which uses [Evergreen UI Kit](https://evergreen.segment.com/components/). We are also going to use [TypeScript](https://typescriptlang.org) as our language. For more information on those projects, visit their websites. We assume you are familiar with those technologies as our tutorial will only cover things you need to integrate the Gnosis Safe Contract Proxy kit and not, for example, how to setup a React project.
 
 ## Installing contract-proxy-kit
 
@@ -17,7 +17,7 @@ If you are using [yarn](https://yarnpkg.com/):
 ```
 yarn add contract-proxy-kit
 ```
-Or if [npm](npmjs.com)
+Or if [npm](https://npmjs.com)
 ```
 npm i contract-proxy-kit
 ```
@@ -60,7 +60,7 @@ export default ConnectButton
 
 Then you can use this component in your `App.tsx`
 
-```
+```jsx
 import React, { useState } from "react"
 import Web3 from "web3"
 import ConnectButton from "src/components/ConnectButton"
@@ -86,7 +86,7 @@ const App: React.FC = () => {
 
 As soon as we got the wallet integration provider, we're ready to initialize the CPK instance. In case of web3.js, we do this simply by calling CPK.create and passing provider instance as an option with `web3` key, so our `App.tsx` looks like this now:
 
-```
+```jsx
 import React, { useState, useEffect } from "react"
 import Web3 from "web3"
 import CPK from "contract-proxy-kit"
@@ -221,6 +221,8 @@ await cpk.execTransactions(txs)
 ```
 
 `execTransactions` will return an object with [promiEvent](https://web3js.readthedocs.io/en/v1.2.5/callbacks-promises-events.html#promievent) property you can use to subscribe for updates.
+
+The source code of the complete example app can be found [here](https://github.com/gnosis/cpk-compound-example)
 
 ## Useful links
 
