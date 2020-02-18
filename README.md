@@ -1,4 +1,4 @@
-Tutorial can be found in [TUTORIAL.md](https://github.com/gnosis/contract-proxy-kit/blob/master/README.md)
+Tutorial can be found in [TUTORIAL.md](https://github.com/gnosis/cpk-compound-example/blob/master/TUTORIAl.md)
 
 App can be found live here: http://green-summer.surge.sh/
 
