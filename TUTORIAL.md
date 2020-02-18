@@ -1,6 +1,19 @@
 # Integrating Gnosis Safe Proxy Kit with the frontend (Compound App Example)
 # App can be found live here: http://green-summer.surge.sh/
 
+## Introduction
+
+This tutorial will teach you how you can use Gnosis Safe Contract Proxy Kit to perform batched transactions and interact with smart contracts. 
+This tutorial is meant for those with a basic knowledge of Ethereum and Solidity. Furthermore, you should have some basic knowledge in JavaScript.
+ 
+In this Tutorial we will cover: 
+
+- How to install and initialize CPK
+- How to interact with the CPK JavaScript library
+- How to perform a transaction
+- How to interact with a smart contract
+- How to use batched transactions
+
 ## Web3/Ethers.js
 
 Gnosis Safe Proxy Kit is a smart contract on the Ethereum blockchain. There are two popular libraries for interacting with the blockchain: [web3.js](https://github.com/ethereum/web3.js) and [ethers.js](https://github.com/ethers-io/ethers.js/). Your users will need a wallet that supports web3, in this tutorial we will use [web3connect](https://web3connect.com/) library which provides integrations with the majority of popular wallets.
