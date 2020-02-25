@@ -78,7 +78,17 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
       .times(DECIMALS_18)
       .toString()
 
-    await dai.methods.transfer(cpk.address, daiAmount).send({ from: address })
+    if (cpk.address !== address) {
+      const proxyDaiBalance = await dai.methods.balanceOf(cpk.address).call()
+      if (proxyDaiBalance < daiAmount) {
+        await dai.methods
+          .transfer(
+            cpk.address,
+            (parseInt(daiAmount, 10) - proxyDaiBalance).toString()
+          )
+          .send({ from: address })
+      }
+    }
 
     const txs = [
       {
