@@ -115,10 +115,6 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
       return
     }
 
-    if (!daiInputAmount) {
-      return
-    }
-
     const daiAmount = new BigNumber(daiInputAmount)
       .times(DECIMALS_18)
       .toString()
