@@ -78,6 +78,10 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
       .times(DECIMALS_18)
       .toString()
 
+    // 1. Fund the proxy
+
+    // 2. Prepare transactions to execute with Contract Proxy Kit
+
     getData()
   }
 
@@ -89,6 +93,8 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
     const daiAmount = new BigNumber(daiInputAmount)
       .times(DECIMALS_18)
       .toString()
+
+    // Prepare transactions to execute with Contract Proxy Kit
 
     getData()
   }

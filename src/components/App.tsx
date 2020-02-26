@@ -53,6 +53,8 @@ const App: React.FC = () => {
           web3.eth.net.getId()
         ])
 
+        // initialize Contract Proxy Kit
+
         updateWalletState({
           account: accounts[0],
           networkId
