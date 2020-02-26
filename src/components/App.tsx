@@ -53,8 +53,6 @@ const App: React.FC = () => {
           web3.eth.net.getId()
         ])
 
-        setProxyKit(await CPK.create({ web3 }))
-
         updateWalletState({
           account: accounts[0],
           networkId
