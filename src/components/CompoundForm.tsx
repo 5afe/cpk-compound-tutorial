@@ -4,12 +4,10 @@ import BigNumber from "bignumber.js"
 import { TabNavigation, Tab, Paragraph, TextInput, Button } from "evergreen-ui"
 import cERC20Abi from "src/abis/CErc20.json"
 import { CDAI_ADDRESS, DAI_ADDRESS } from "src/contracts"
-import CPK from "contract-proxy-kit"
 
 interface ICompoundForm {
   web3: any
   address: string
-  cpk: CPK
 }
 
 type CompoundOperation = "invest" | "withdraw"
@@ -24,18 +22,10 @@ const SContainer = styled.div`
   margin-top: 25px;
 `
 
-const SMobileLineBreak = styled.br`
-  display: none;
-
-  @media screen and (max-width: 768px) {
-    display: initial;
-  }
-`
-
 const formatNumber = (value: number) =>
   new BigNumber(value).div(DECIMALS_18).toFixed(4)
 
-const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
+const CompoundForm: React.FC<ICompoundForm> = ({ web3, address }) => {
   const dai = useMemo(() => new web3.eth.Contract(cERC20Abi, DAI_ADDRESS), [
     web3
   ])
@@ -49,6 +39,7 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
   const [daiBalance, setDaiBalance] = useState<number>(0)
   const [cDaiLocked, setCDaiLocked] = useState<number>(0)
   const [daiInputAmount, setDaiInputAmount] = useState<string>("")
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const getData = useCallback(async () => {
     // supplyRate
@@ -65,48 +56,24 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
     setDaiBalance(daiBalance)
 
     // dai Locked
-    const daiLocked = await cDai.methods.balanceOfUnderlying(cpk.address).call()
+    const daiLocked = await cDai.methods.balanceOfUnderlying(address).call()
     setCDaiLocked(daiLocked)
-  }, [address, cDai.methods, cpk.address, dai.methods])
+  }, [address, cDai.methods, dai.methods])
 
   const lockDai = async () => {
     if (!daiInputAmount) {
       return
     }
+    setIsLoading(true)
 
     const daiAmount = new BigNumber(daiInputAmount)
       .times(DECIMALS_18)
       .toString()
 
-    if (cpk.address !== address) {
-      const proxyDaiBalance = await dai.methods.balanceOf(cpk.address).call()
-      if (proxyDaiBalance < daiAmount) {
-        await dai.methods
-          .transfer(
-            cpk.address,
-            (parseInt(daiAmount, 10) - proxyDaiBalance).toString()
-          )
-          .send({ from: address })
-      }
-    }
+    await dai.methods.approve(CDAI_ADDRESS, daiAmount).send({ from: address })
+    await cDai.methods.mint(daiAmount).send({ from: address })
 
-    const txs = [
-      {
-        operation: CPK.CALL,
-        to: DAI_ADDRESS,
-        value: 0,
-        data: dai.methods.approve(CDAI_ADDRESS, daiAmount).encodeABI()
-      },
-      {
-        operation: CPK.CALL,
-        to: CDAI_ADDRESS,
-        value: 0,
-        data: cDai.methods.mint(daiAmount).encodeABI()
-      }
-    ]
-
-    await cpk.execTransactions(txs)
-
+    setIsLoading(false)
     getData()
   }
 
@@ -114,32 +81,16 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
     if (!daiInputAmount) {
       return
     }
-
-    if (!daiInputAmount) {
-      return
-    }
+    setIsLoading(true)
 
     const daiAmount = new BigNumber(daiInputAmount)
       .times(DECIMALS_18)
       .toString()
 
-    const txs = [
-      {
-        operation: CPK.CALL,
-        to: CDAI_ADDRESS,
-        value: 0,
-        data: cDai.methods.redeemUnderlying(daiAmount).encodeABI()
-      },
-      {
-        operation: CPK.CALL,
-        to: DAI_ADDRESS,
-        value: 0,
-        data: dai.methods.transfer(address, daiAmount).encodeABI()
-      }
-    ]
+    await cDai.methods.redeemUnderlying(daiAmount).send({ from: address })
+    await dai.methods.transfer(address, daiAmount).encodeABI({ from: address })
 
-    await cpk.execTransactions(txs)
-
+    setIsLoading(false)
     getData()
   }
 
@@ -149,11 +100,6 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
 
   return (
     <SContainer>
-      <Paragraph textAlign="left">
-        <b>PROXY ADDRESS: </b>
-        <SMobileLineBreak />
-        {cpk.address}
-      </Paragraph>
       <Paragraph>
         <b>DAI APR: </b>
         {cDaiSupplyAPR}
@@ -191,6 +137,7 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
       <Button
         appearance="primary"
         intent="success"
+        isLoading={isLoading}
         marginTop="10px"
         onClick={userOperation === "invest" ? lockDai : withdrawDai}
       >
