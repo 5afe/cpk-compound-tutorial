@@ -1,9 +1,6 @@
 import * as React from "react"
 import Web3Connect from "web3connect"
-
-const {
-  default: WalletConnectProvider
-} = require("@walletconnect/web3-provider")
+import WalletConnectProvider from '@walletconnect/web3-provider'
 
 type Props = {
   onConnect: Function

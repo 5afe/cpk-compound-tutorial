@@ -12,7 +12,7 @@
     "@types/react-dom": "16.9.5",
     "@types/styled-components": "5.0.1",
     "@types/contract-proxy-kit": "1.0.1",
-    "@walletconnect/web3-provider": "^1.0.0-beta.44",
+    "@walletconnect/web3-provider": "^1.0.0-beta.62",
     "bignumber.js": "^9.0.0",
     "contract-proxy-kit": "^1.0.0",
     "ethereum-blockies-base64": "^1.0.2",
