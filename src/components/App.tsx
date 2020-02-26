@@ -33,7 +33,7 @@ const initialWalletState = {
 }
 
 const App: React.FC = () => {
-  const [web3, setWeb3] = React.useState<any>(undefined)
+  const [web3, setWeb3] = React.useState<Web3 | undefined>(undefined)
   const [proxyKit, setProxyKit] = React.useState<CPK | undefined>(undefined)
   const [walletState, updateWalletState] = useCustomReducer<IWalletState>(
     initialWalletState
@@ -47,22 +47,22 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const fetchWalletData = async () => {
-      const [accounts, networkId] = await Promise.all([
-        web3.eth.getAccounts(),
-        web3.eth.net.getId()
-      ])
+      if (web3) {
+        const [accounts, networkId] = await Promise.all([
+          web3.eth.getAccounts(),
+          web3.eth.net.getId()
+        ])
 
-      setProxyKit(await CPK.create({ web3 }))
+        setProxyKit(await CPK.create({ web3 }))
 
-      updateWalletState({
-        account: accounts[0],
-        networkId
-      })
+        updateWalletState({
+          account: accounts[0],
+          networkId
+        })
+      }
     }
 
-    if (web3) {
-      fetchWalletData()
-    }
+    fetchWalletData()
   }, [updateWalletState, web3])
 
   return (
