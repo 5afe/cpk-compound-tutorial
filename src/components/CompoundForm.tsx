@@ -81,7 +81,9 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
     if (cpk.address !== address) {
       const proxyDaiBalance = await dai.methods.balanceOf(cpk.address).call()
       if (proxyDaiBalance < daiAmount) {
-        await dai.methods.transfer(cpk.address, (daiAmount - proxyDaiBalance).toString()).send({ from: address })
+        await dai.methods
+          .transfer(cpk.address, (daiAmount - proxyDaiBalance).toString())
+          .send({ from: address })
       }
     }
 
@@ -90,7 +92,9 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
         operation: "0",
         to: DAI_ADDRESS,
         value: "0",
-        data: dai.methods.approve(CDAI_ADDRESS, daiAmount.toString()).encodeABI()
+        data: dai.methods
+          .approve(CDAI_ADDRESS, daiAmount.toString())
+          .encodeABI()
       },
       {
         operation: "0",
@@ -106,10 +110,6 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
   }
 
   const withdrawDai = async () => {
-    if (!daiInputAmount) {
-      return
-    }
-
     if (!daiInputAmount) {
       return
     }
