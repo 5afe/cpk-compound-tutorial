@@ -76,32 +76,31 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
 
     const daiAmount = new BigNumber(daiInputAmount)
       .times(DECIMALS_18)
-      .toString()
+      .toNumber()
 
     if (cpk.address !== address) {
       const proxyDaiBalance = await dai.methods.balanceOf(cpk.address).call()
       if (proxyDaiBalance < daiAmount) {
         await dai.methods
-          .transfer(
-            cpk.address,
-            (parseInt(daiAmount, 10) - proxyDaiBalance).toString()
-          )
+          .transfer(cpk.address, (daiAmount - proxyDaiBalance).toString())
           .send({ from: address })
       }
     }
 
     const txs = [
       {
-        operation: CPK.CALL,
+        operation: "0",
         to: DAI_ADDRESS,
-        value: 0,
-        data: dai.methods.approve(CDAI_ADDRESS, daiAmount).encodeABI()
+        value: "0",
+        data: dai.methods
+          .approve(CDAI_ADDRESS, daiAmount.toString())
+          .encodeABI()
       },
       {
-        operation: CPK.CALL,
+        operation: "0",
         to: CDAI_ADDRESS,
-        value: 0,
-        data: cDai.methods.mint(daiAmount).encodeABI()
+        value: "0",
+        data: cDai.methods.mint(daiAmount.toString()).encodeABI()
       }
     ]
 
