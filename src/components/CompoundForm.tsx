@@ -46,6 +46,7 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
     "invest"
   )
   const [cDaiSupplyAPR, setCDaiSupplyAPR] = useState<string>("0")
+  const [proxyDaiBalance, setProxyDaiBalance] = useState<number>(0)
   const [daiBalance, setDaiBalance] = useState<number>(0)
   const [cDaiLocked, setCDaiLocked] = useState<number>(0)
   const [daiInputAmount, setDaiInputAmount] = useState<string>("")
@@ -60,11 +61,15 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
       .toFixed(2)
     setCDaiSupplyAPR(res)
 
-    // dai Balance
+    // DAI Balance
     const daiBalance = await dai.methods.balanceOf(address).call()
     setDaiBalance(daiBalance)
 
-    // dai Locked
+    // proxy DAI Balance
+    const proxyDaiBalance = await dai.methods.balanceOf(cpk.address).call()
+    setProxyDaiBalance(proxyDaiBalance)
+
+    // DAI Locked
     const daiLocked = await cDai.methods.balanceOfUnderlying(cpk.address).call()
     setCDaiLocked(daiLocked)
   }, [address, cDai.methods, cpk.address, dai.methods])
@@ -79,7 +84,6 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
       .toNumber()
 
     if (cpk.address !== address) {
-      const proxyDaiBalance = await dai.methods.balanceOf(cpk.address).call()
       if (proxyDaiBalance < daiAmount) {
         await dai.methods
           .transfer(cpk.address, (daiAmount - proxyDaiBalance).toString())
@@ -148,6 +152,10 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
         <b>PROXY ADDRESS: </b>
         <SMobileLineBreak />
         {cpk.address}
+      </Paragraph>
+      <Paragraph textAlign="left">
+        <b>PROXY DAI BALANCE: </b>
+        {formatNumber(proxyDaiBalance)}
       </Paragraph>
       <Paragraph>
         <b>DAI APR: </b>
