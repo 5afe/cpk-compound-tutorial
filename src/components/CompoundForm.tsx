@@ -93,7 +93,7 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
 
     const txs = [
       {
-        operation: "0",
+        operation: CPK.CALL,
         to: DAI_ADDRESS,
         value: "0",
         data: dai.methods
@@ -101,7 +101,7 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
           .encodeABI()
       },
       {
-        operation: "0",
+        operation: CPK.CALL,
         to: CDAI_ADDRESS,
         value: "0",
         data: cDai.methods.mint(daiAmount.toString()).encodeABI()
