@@ -122,15 +122,9 @@ Here, we check if the contract proxy kit's address is not the same as our user's
 
 ## Using CPK to invest DAI into Compound
 
-First, we need to fund the proxy with the amount of DAI we want to invest:
+Right below the place where you added code in previous section, you should see a second comment "Prepare transactions to execute with Contract Proxy Kit". Replace this one with:
 
-```jsx
-await dai.methods.transfer(cpk.address, daiAmount).send({ from: address })
-```
-
-Second, we need to prepare an array of transactions to execute for the Contract Proxy Kit:
-
-```jsx
+```js
 const txs = [
       {
         operation: CPK.CALL,
@@ -145,20 +139,45 @@ const txs = [
         data: cDai.methods.mint(daiAmount).encodeABI()
       }
     ]
-```
 
-And then we simply execute it by calling `execTransactions` on the CPK instance:
-
-```jsx
 await cpk.execTransactions(txs)
 ```
 
+We prepared transactions to execute with our desired contract methods and passed them to `cpk.execTransactions`. And now we're using the CPK to interact with Compound protocol. Yes, it's that simple.
+
 `execTransactions` will return an object with [promiEvent](https://web3js.readthedocs.io/en/v1.2.5/callbacks-promises-events.html#promievent) property you can use to subscribe for updates.
 
-The source code of the complete example app can be found [here](https://github.com/gnosis/cpk-compound-example)
+
+## Withdrawing funds from Compound using CPK
+
+Now that our app has functionality to invest, we may also want to add a way to withdraw the funds. The way we do it is the same as in last section on investing - we need to prepare array of transactions and pass them to `cpk.execTransactions`
+
+In withdrawDai method find a comment "Prepare transactions to execute with Contract Proxy Kit" and replace it with the following:
+```js
+const txs = [
+  {
+    operation: CPK.CALL,
+    to: CDAI_ADDRESS,
+    value: 0,
+    data: cDai.methods.redeemUnderlying(daiAmount).encodeABI()
+  },
+  {
+    operation: CPK.CALL,
+    to: DAI_ADDRESS,
+    value: 0,
+    data: dai.methods.transfer(address, daiAmount).encodeABI()
+  }
+]
+
+await cpk.execTransactions(txs)
+```
+
+Now we're all set! You can withdraw your funds.
+
+The source code of the complete tutorial app can be found [here](https://github.com/gnosis/cpk-compound-tutorial). For any questions or help, please join our [Discord](https://chat.gnosis.io/)
 
 ## Useful links
 
 - [Contract Proxy Kit documentation](https://github.com/gnosis/contract-proxy-kit)
 - [Web3.js docs](https://web3js.readthedocs.io/)
-- [Source code for the example app](https://github.com/gnosis/cpk-compound-example)
+- [Source code for the tutorial app](https://github.com/gnosis/cpk-compound-tutorial)
