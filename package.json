@@ -16,7 +16,7 @@
     "bignumber.js": "^9.0.0",
     "contract-proxy-kit": "1.1.0",
     "ethereum-blockies-base64": "^1.0.2",
-    "evergreen-ui": "4.23.0",
+    "evergreen-ui": "4.23.1",
     "react": "16.13.0",
     "react-dom": "16.13.0",
     "react-scripts": "3.4.0",
