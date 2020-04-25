@@ -163,7 +163,8 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
       </Paragraph>
       <Paragraph>
         <b>DAI BALANCE: </b>
-        {formatNumber(daiBalance)}
+        {formatNumber(daiBalance) + ' '}
+        <a href="https://ethereum.stackexchange.com/a/80204" target="_blank">(Request Testnet DAI?)</a>
       </Paragraph>
       <Paragraph>
         <b>DAI LOCKED: </b>
