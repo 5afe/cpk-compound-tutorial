@@ -1,28 +1,17 @@
+import avertaBoldFont from '@gnosis.pm/safe-react-components/dist/fonts/averta-bold.woff2'
+import avertaFont from '@gnosis.pm/safe-react-components/dist/fonts/averta-normal.woff2'
 import { createGlobalStyle } from "styled-components"
 import { normalize } from "styled-normalize"
-import Averta from 'src/assets/fonts/Averta-normal.woff2'
-import AvertaBold from 'src/assets/fonts/Averta-ExtraBold.woff2'
 
 const GlobalStyles = createGlobalStyle`
   ${normalize}
 
-
   @font-face {
-    font-family: "Averta";
-    font-style: normal;
-    font-weight: 400;
+    font-family: 'Averta';
     font-display: swap;
-    src: local("Averta-Regular"), 
-      url(${Averta}) format("woff2");
-  }
-
-  @font-face {
-    font-family: "Averta";
-    font-style: normal;
-    font-weight: 800;
-    font-display: swap;
-    src: local("Averta-Extrabold"),
-      url(${AvertaBold}) format("woff2");
+    src: local('Averta'), local('Averta Bold'),
+    url(${avertaFont}) format('woff2'),
+    url(${avertaBoldFont}) format('woff');
   }
 
   body {
@@ -37,7 +26,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   button {
-    background-color: #008c73 !important;
+    --background-color: #008c73 !important;
   }
 
   .walletconnect-qrcode__base {
