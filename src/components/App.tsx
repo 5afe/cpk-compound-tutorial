@@ -1,12 +1,11 @@
+import CPK, { Web3Adapter } from "contract-proxy-kit"
 import React, { useEffect } from "react"
-import Web3 from "web3"
-import styled from "styled-components"
-import CPK from "contract-proxy-kit"
-import ConnectButton from "src/components/ConnectButton"
-import useCustomReducer from "src/hooks/useCustomReducer"
-import CompoundForm from "src/components/CompoundForm"
-import WalletInfo from "src/components/WalletInfo"
 import SafeLogo from "src/assets/icons/safe-logo.svg"
+import CompoundForm from "src/components/CompoundForm"
+import ConnectButton from "src/components/ConnectButton"
+import WalletInfo from "src/components/WalletInfo"
+import styled from "styled-components"
+import Web3 from "web3"
 
 const SAppContainer = styled.main`
   display: flex;
@@ -35,7 +34,7 @@ const initialWalletState = {
 const App: React.FC = () => {
   const [web3, setWeb3] = React.useState<Web3 | undefined>(undefined)
   const [proxyKit, setProxyKit] = React.useState<CPK | undefined>(undefined)
-  const [walletState, updateWalletState] = useCustomReducer<IWalletState>(
+  const [walletState, updateWalletState] = React.useState<IWalletState>(
     initialWalletState
   )
 
@@ -53,7 +52,9 @@ const App: React.FC = () => {
           web3.eth.net.getId()
         ])
 
-        setProxyKit(await CPK.create({ web3 }))
+        const ethLibAdapter = new Web3Adapter({ web3 })
+        const cpk = await CPK.create({ ethLibAdapter })
+        setProxyKit(cpk)
 
         updateWalletState({
           account: accounts[0],

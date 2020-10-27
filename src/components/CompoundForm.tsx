@@ -68,11 +68,6 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
   const [selectedTab, setSelectedTab] = useState('1')
 
   const getData = useCallback(async () => {
-    if (!cpk.address) {
-      console.log("mal")
-      return
-    }
-
     // supplyRate
     const cDaiSupplyRate = await cDai.methods.supplyRatePerBlock().call()
     const res = new BigNumber(cDaiSupplyRate)
@@ -97,10 +92,6 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
 
   const lockDai = async () => {
     if (!daiInputAmount) {
-      return
-    }
-    if (!cpk.address) {
-      console.log("mal")
       return
     }
 
@@ -133,8 +124,12 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
       }
     ]
 
-    await cpk.execTransactions(txs)
-
+    const txResult: any = await cpk.execTransactions(txs)
+    await new Promise((resolve, reject) =>
+      txResult.promiEvent
+        ?.then((receipt: any) => resolve(receipt))
+        .catch(reject)
+    )
     getData()
   }
 
@@ -162,8 +157,12 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
       }
     ]
 
-    await cpk.execTransactions(txs)
-
+    const txResult: any = await cpk.execTransactions(txs)
+    await new Promise((resolve, reject) =>
+    txResult.promiEvent
+      ?.then((receipt: any) => resolve(receipt))
+      .catch(reject)
+  )
     getData()
   }
 
