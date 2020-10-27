@@ -25,12 +25,16 @@ const GlobalStyles = createGlobalStyle`
     height: 100vh;
   }
 
-  button {
-    --background-color: #008c73 !important;
+  .web3connect-connect-button {
+    background-color: #008c73 !important;
   }
 
   .walletconnect-qrcode__base {
     left: 0;
+  }
+
+  a {
+    color: #008c73;
   }
 `
 

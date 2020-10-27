@@ -44,7 +44,7 @@ const tabs: TabItem[] = [
   {
     id: '1',
     label: 'Invest',
-    icon: 'info'
+    icon: 'transactionsInactive'
   },
   {
     id: '2',
