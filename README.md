@@ -1,12 +1,12 @@
-## CPK Compound Example
+## CPK Compound Tutorial
 
 An example Dapp using the Gnosis Safe [Contract Proxy Kit](https://github.com/gnosis/contract-proxy-kit) which works as a Safe App or a standalone app.
 
-Tutorial can be found in [TUTORIAL.md](https://github.com/gnosis/cpk-compound-example/blob/master/TUTORIAL.md).
+Tutorial can be found in [TUTORIAL.md](https://github.com/gnosis/cpk-compound-tutorial/blob/master/TUTORIAL.md).
 
 Only available for Rinkeby network at this moment.
 
-The source code of the complete example app can be found [here](https://gnosis.github.io/cpk-compound-example/).
+The source code of the complete tutorial app can be found [here](https://gnosis.github.io/cpk-compound-tutorial/).
 
 ## Available Scripts
 

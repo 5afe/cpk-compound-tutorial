@@ -1,7 +1,7 @@
 {
   "short_name": "CPK Compound",
-  "name": "CPK Compound Example",
-  "description": "Safe Contract Proxy Kit Compound Example",
+  "name": "CPK Compound Tutorial",
+  "description": "Safe Contract Proxy Kit Compound Tutorial",
   "iconPath": "logo512.png",
   "icons": [
     {

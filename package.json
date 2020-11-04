@@ -1,7 +1,7 @@
 {
-  "name": "cpk-compound-example",
+  "name": "cpk-compound-tutorial",
   "version": "0.1.0",
-  "homepage": "https://gnosis.github.io/cpk-compound-example/",
+  "homepage": "https://gnosis.github.io/cpk-compound-tutorial/",
   "private": true,
   "dependencies": {
     "@gnosis.pm/safe-react-components": "^0.3.0",

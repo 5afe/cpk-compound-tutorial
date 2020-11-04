@@ -1,5 +1,5 @@
-# Integrating Gnosis Safe Proxy Kit with the frontend (Compound App Example)
-# App can be found live here: https://gnosis.github.io/cpk-compound-example/
+# Integrating Gnosis Safe Proxy Kit with the frontend (Compound App Tutorial)
+# App can be found live here: https://gnosis.github.io/cpk-compound-tutorial/
 
 ## Introduction
 
@@ -24,8 +24,10 @@ Our example project will be a [React](https://reactjs.org) application bootstrap
 
 ## Useful links
 
+- [Source code for the tutorial app](https://github.com/gnosis/cpk-compound-tutorial)
 - [Contract Proxy Kit documentation](https://github.com/gnosis/contract-proxy-kit)
 - [Video introduction to Building with Safe Apps SDK & Contract Proxy Kit](https://www.youtube.com/watch?v=YGw8WfBw5OI)
+- [Web3.js docs](https://web3js.readthedocs.io/)
 
 ## Installing contract-proxy-kit
 
@@ -140,7 +142,7 @@ const App: React.FC = () => {
 
 ## Fetching the necessary data from the blockchain
 
-First we need to initialize the DAI and Compound DAI token contracts instances, the ABI can be found [here](https://github.com/gnosis/cpk-compound-example/blob/master/src/abis/CErc20.json):
+First we need to initialize the DAI and Compound DAI token contracts instances, the ABI can be found [here](https://github.com/gnosis/cpk-compound-tutorial/blob/master/src/abis/CErc20.json):
 
 ```jsx
 import React, { useMemo } from "react"
@@ -241,11 +243,3 @@ await cpk.execTransactions(txs)
 ```
 
 `execTransactions` will return an object with [promiEvent](https://web3js.readthedocs.io/en/v1.2.5/callbacks-promises-events.html#promievent) property you can use to subscribe for updates.
-
-The source code of the complete example app can be found [here](https://github.com/gnosis/cpk-compound-example).
-
-## Useful links
-
-- [Contract Proxy Kit documentation](https://github.com/gnosis/contract-proxy-kit)
-- [Web3.js docs](https://web3js.readthedocs.io/)
-- [Source code for the example app](https://github.com/gnosis/cpk-compound-example)
