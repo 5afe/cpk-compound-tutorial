@@ -1,6 +1,12 @@
-Tutorial can be found in [TUTORIAL.md](https://github.com/gnosis/cpk-compound-example/blob/master/TUTORIAL.md)
+## CPK Compound Example
 
-App can be found live here: http://green-summer.surge.sh/
+An example Dapp using the Gnosis Safe [Contract Proxy Kit](https://github.com/gnosis/contract-proxy-kit) which works as a Safe App or a standalone app.
+
+Tutorial can be found in [TUTORIAL.md](https://github.com/gnosis/cpk-compound-example/blob/master/TUTORIAL.md).
+
+Only available for Rinkeby network at this moment.
+
+App can be found live here: https://gnosis.github.io/cpk-compound-example/.
 
 ## Available Scripts
 
