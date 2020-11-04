@@ -13,6 +13,7 @@ const AccountInfo: React.FC<{ address: string }> = ({ address }) => {
       showCopyBtn
       showIdenticon
       showEtherscanBtn
+      network="rinkeby"
     />
   )
 }

@@ -191,6 +191,7 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
             showCopyBtn
             showIdenticon
             showEtherscanBtn
+            network="rinkeby"
           />
         )}
       </Line>
@@ -218,7 +219,7 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
         </TitleLine>
         <Text size="xl">
           {formatNumber(daiBalance)}{' '}
-          <a href="https://ethereum.stackexchange.com/a/80204" target="_blank">
+          <a href="https://ethereum.stackexchange.com/a/80204" target="_blank" rel="noreferrer">
             (Request Testnet DAI?)
           </a>
         </Text>
