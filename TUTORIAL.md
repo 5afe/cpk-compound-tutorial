@@ -22,6 +22,11 @@ Gnosis Safe Proxy Kit is a smart contract on the Ethereum blockchain. There are 
 
 Our example project will be a [React](https://reactjs.org) application bootstrapped with [create-react-app](https://github.com/facebook/create-react-app) which uses [Evergreen UI Kit](https://evergreen.segment.com/components/). We are also going to use [TypeScript](https://typescriptlang.org) as our language. For more information on those projects, visit their websites. We assume you are familiar with those technologies as our tutorial will only cover things you need to integrate the Gnosis Safe Contract Proxy kit and not, for example, how to setup a React project.
 
+## Useful links
+
+- [Contract Proxy Kit documentation](https://github.com/gnosis/contract-proxy-kit)
+- [Video introduction to Building with Safe Apps SDK & Contract Proxy Kit](https://www.youtube.com/watch?v=YGw8WfBw5OI)
+
 ## Installing contract-proxy-kit
 
 To install the CPK, run following command in the root directory of your project:
@@ -102,7 +107,7 @@ As soon as we got the wallet integration provider, we're ready to initialize the
 ```jsx
 import React, { useState, useEffect } from "react"
 import Web3 from "web3"
-import CPK from "contract-proxy-kit"
+import CPK, { Web3Adapter } from "contract-proxy-kit"
 import ConnectButton from "src/components/ConnectButton"
 
 const App: React.FC = () => {
@@ -117,7 +122,9 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const initializeCPK = async () => {
-      setProxyKit(await CPK.create({ web3 }))
+      const ethLibAdapter = new Web3Adapter({ web3 })
+      const cpk = await CPK.create({ ethLibAdapter })
+      setProxyKit(cpk)
     }
 
     initializeCPK()
@@ -212,19 +219,19 @@ Second, we need to prepare an array of transactions to execute for the Contract 
 
 ```jsx
 const txs = [
-      {
-        operation: CPK.CALL,
-        to: DAI_ADDRESS,
-        value: 0,
-        data: dai.methods.approve(CDAI_ADDRESS, daiAmount).encodeABI()
-      },
-      {
-        operation: CPK.CALL,
-        to: CDAI_ADDRESS,
-        value: 0,
-        data: cDai.methods.mint(daiAmount).encodeABI()
-      }
-    ]
+  {
+    operation: CPK.Call,
+    to: DAI_ADDRESS,
+    value: 0,
+    data: dai.methods.approve(CDAI_ADDRESS, daiAmount).encodeABI()
+  },
+  {
+    operation: CPK.Call,
+    to: CDAI_ADDRESS,
+    value: 0,
+    data: cDai.methods.mint(daiAmount).encodeABI()
+  }
+]
 ```
 
 And then we simply execute it by calling `execTransactions` on the CPK instance:

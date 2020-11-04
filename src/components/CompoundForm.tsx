@@ -1,18 +1,23 @@
-import React, { useMemo, useState, useCallback } from "react"
-import styled from "styled-components"
-import BigNumber from "bignumber.js"
-import { TabNavigation, Tab, Paragraph, TextInput, Button } from "evergreen-ui"
-import cERC20Abi from "src/abis/CErc20.json"
-import { CDAI_ADDRESS, DAI_ADDRESS } from "src/contracts"
-import CPK from "contract-proxy-kit"
+import {
+  Button,
+  EthHashInfo,
+  Tab,
+  TabItem,
+  Text,
+  TextField
+} from '@gnosis.pm/safe-react-components'
+import BigNumber from 'bignumber.js'
+import CPK from 'contract-proxy-kit'
+import React, { useCallback, useMemo, useState } from 'react'
+import cERC20Abi from 'src/abis/CErc20.json'
+import { CDAI_ADDRESS, DAI_ADDRESS } from 'src/contracts'
+import styled from 'styled-components'
 
 interface ICompoundForm {
   web3: any
   address: string
   cpk: CPK
 }
-
-type CompoundOperation = "invest" | "withdraw"
 
 const BLOCKS_PER_YEAR = (365.25 * 24 * 3600) / 15
 const DECIMALS_18 = 10 ** 18
@@ -24,16 +29,35 @@ const SContainer = styled.div`
   margin-top: 25px;
 `
 
-const SMobileLineBreak = styled.br`
-  display: none;
+const Line = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 5px 0;
 
   @media screen and (max-width: 768px) {
-    display: initial;
+    display: block;
   }
+`
+
+const TitleLine = styled.div`
+  margin-right: 10px;
 `
 
 const formatNumber = (value: number) =>
   new BigNumber(value).div(DECIMALS_18).toFixed(4)
+
+const tabs: TabItem[] = [
+  {
+    id: '1',
+    label: 'Invest',
+    icon: 'transactionsInactive'
+  },
+  {
+    id: '2',
+    label: 'Withdraw',
+    icon: 'transactionsInactive'
+  }
+]
 
 const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
   const dai = useMemo(() => new web3.eth.Contract(cERC20Abi, DAI_ADDRESS), [
@@ -42,14 +66,12 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
   const cDai = useMemo(() => new web3.eth.Contract(cERC20Abi, CDAI_ADDRESS), [
     web3
   ])
-  const [userOperation, setUserOperation] = useState<CompoundOperation>(
-    "invest"
-  )
-  const [cDaiSupplyAPR, setCDaiSupplyAPR] = useState<string>("0")
+  const [cDaiSupplyAPR, setCDaiSupplyAPR] = useState<string>('0')
   const [proxyDaiBalance, setProxyDaiBalance] = useState<number>(0)
   const [daiBalance, setDaiBalance] = useState<number>(0)
   const [cDaiLocked, setCDaiLocked] = useState<number>(0)
-  const [daiInputAmount, setDaiInputAmount] = useState<string>("")
+  const [daiInputAmount, setDaiInputAmount] = useState<string>('')
+  const [selectedTab, setSelectedTab] = useState('1')
 
   const getData = useCallback(async () => {
     // supplyRate
@@ -72,7 +94,7 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
     // DAI Locked
     const daiLocked = await cDai.methods.balanceOfUnderlying(cpk.address).call()
     setCDaiLocked(daiLocked)
-  }, [address, cDai.methods, cpk.address, dai.methods])
+  }, [address, cDai.methods, cpk, dai.methods])
 
   const lockDai = async () => {
     if (!daiInputAmount) {
@@ -93,23 +115,27 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
 
     const txs = [
       {
-        operation: CPK.CALL,
+        operation: CPK.Call,
         to: DAI_ADDRESS,
-        value: "0",
+        value: '0',
         data: dai.methods
           .approve(CDAI_ADDRESS, daiAmount.toString())
           .encodeABI()
       },
       {
-        operation: CPK.CALL,
+        operation: CPK.Call,
         to: CDAI_ADDRESS,
-        value: "0",
+        value: '0',
         data: cDai.methods.mint(daiAmount.toString()).encodeABI()
       }
     ]
 
-    await cpk.execTransactions(txs)
-
+    const txResult: any = await cpk.execTransactions(txs)
+    await new Promise((resolve, reject) =>
+      txResult.promiEvent
+        ?.then((receipt: any) => resolve(receipt))
+        .catch(reject)
+    )
     getData()
   }
 
@@ -124,21 +150,25 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
 
     const txs = [
       {
-        operation: CPK.CALL,
+        operation: CPK.Call,
         to: CDAI_ADDRESS,
         value: 0,
         data: cDai.methods.redeemUnderlying(daiAmount).encodeABI()
       },
       {
-        operation: CPK.CALL,
+        operation: CPK.Call,
         to: DAI_ADDRESS,
         value: 0,
         data: dai.methods.transfer(address, daiAmount).encodeABI()
       }
     ]
 
-    await cpk.execTransactions(txs)
-
+    const txResult: any = await cpk.execTransactions(txs)
+    await new Promise((resolve, reject) =>
+      txResult.promiEvent
+        ?.then((receipt: any) => resolve(receipt))
+        .catch(reject)
+    )
     getData()
   }
 
@@ -148,58 +178,92 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
 
   return (
     <SContainer>
-      <Paragraph textAlign="left">
-        <b>PROXY ADDRESS: </b>
-        <SMobileLineBreak />
-        {cpk.address}
-      </Paragraph>
-      <Paragraph textAlign="left">
-        <b>PROXY DAI BALANCE: </b>
-        {formatNumber(proxyDaiBalance)}
-      </Paragraph>
-      <Paragraph>
-        <b>DAI APR: </b>
-        {cDaiSupplyAPR}
-      </Paragraph>
-      <Paragraph>
-        <b>DAI BALANCE: </b>
-        {formatNumber(daiBalance) + ' '}
-        <a href="https://ethereum.stackexchange.com/a/80204" target="_blank">(Request Testnet DAI?)</a>
-      </Paragraph>
-      <Paragraph>
-        <b>DAI LOCKED: </b>
-        {formatNumber(cDaiLocked)}
-      </Paragraph>
-
-      <TabNavigation marginTop="20px">
-        {["invest", "withdraw"].map(tab => (
-          <Tab
-            key={tab}
-            isSelected={userOperation === tab}
-            // @ts-ignore
-            onSelect={() => setUserOperation(tab)}
-          >
-            {tab[0].toUpperCase() + tab.slice(1)}
-          </Tab>
-        ))}
-      </TabNavigation>
-      <TextInput
-        name="daiAmount"
-        placeholder="DAI Amount"
-        marginTop="20px"
+      <Line>
+        <TitleLine>
+          <Text size="xl" strong>
+            Proxy address:
+          </Text>
+        </TitleLine>
+        {cpk.address && (
+          <EthHashInfo
+            hash={cpk.address}
+            textSize="xl"
+            showCopyBtn
+            showIdenticon
+            showEtherscanBtn
+            network="rinkeby"
+          />
+        )}
+      </Line>
+      <Line>
+        <TitleLine>
+          <Text size="xl" strong>
+            Proxy Dai balance:
+          </Text>
+        </TitleLine>
+        <Text size="xl">{formatNumber(proxyDaiBalance)}</Text>
+      </Line>
+      <Line>
+        <TitleLine>
+          <Text size="xl" strong>
+            Dai APR:
+          </Text>
+        </TitleLine>
+        <Text size="xl">{cDaiSupplyAPR}%</Text>
+      </Line>
+      <Line>
+        <TitleLine>
+          <Text size="xl" strong>
+            DAI balance:
+          </Text>
+        </TitleLine>
+        <Text size="xl">
+          {formatNumber(daiBalance)}{' '}
+          <a href="https://ethereum.stackexchange.com/a/80204" target="_blank" rel="noreferrer">
+            (Request Testnet DAI?)
+          </a>
+        </Text>
+      </Line>
+      <Line>
+        <TitleLine>
+          <Text size="xl" strong>
+            DAI locked:
+          </Text>
+        </TitleLine>
+        <Text size="xl">{formatNumber(cDaiLocked)}</Text>
+      </Line>
+      <br />
+      <Tab
+        onChange={setSelectedTab}
+        selectedTab={selectedTab}
+        variant="outlined"
+        items={tabs}
+      />
+      <br />
+      <TextField
+        id="daiAmount"
+        label="DAI Amount"
         value={daiInputAmount}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           setDaiInputAmount(event.target.value)
         }}
       />
-      <Button
-        appearance="primary"
-        intent="success"
-        marginTop="10px"
-        onClick={userOperation === "invest" ? lockDai : withdrawDai}
-      >
-        {userOperation === "invest" ? "Invest" : "Withdraw"}
-      </Button>
+      <br />
+      {selectedTab === '1' && (
+        <Button size="lg" color="primary" variant="contained" onClick={lockDai}>
+          Invest
+        </Button>
+      )}
+      {selectedTab === '2' && (
+        <Button
+          size="lg"
+          color="primary"
+          variant="contained"
+          onClick={withdrawDai}
+        >
+          Withdraw
+        </Button>
+      )}
     </SContainer>
   )
 }
