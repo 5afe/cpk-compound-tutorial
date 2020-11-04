@@ -1,5 +1,5 @@
 # Integrating Gnosis Safe Proxy Kit with the frontend (Compound App Example)
-# App can be found live here: http://green-summer.surge.sh/
+# App can be found live here: https://gnosis.github.io/cpk-compound-example/
 
 ## Introduction
 
@@ -242,7 +242,7 @@ await cpk.execTransactions(txs)
 
 `execTransactions` will return an object with [promiEvent](https://web3js.readthedocs.io/en/v1.2.5/callbacks-promises-events.html#promievent) property you can use to subscribe for updates.
 
-The source code of the complete example app can be found [here](https://github.com/gnosis/cpk-compound-example)
+The source code of the complete example app can be found [here](https://github.com/gnosis/cpk-compound-example).
 
 ## Useful links
 

@@ -6,7 +6,7 @@ Tutorial can be found in [TUTORIAL.md](https://github.com/gnosis/cpk-compound-ex
 
 Only available for Rinkeby network at this moment.
 
-App can be found live here: https://gnosis.github.io/cpk-compound-example/.
+The source code of the complete example app can be found [here](https://gnosis.github.io/cpk-compound-example/).
 
 ## Available Scripts
 
