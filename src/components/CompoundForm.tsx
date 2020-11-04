@@ -1,10 +1,17 @@
-import { Button, EthHashInfo, Tab, TabItem, Text, TextField } from "@gnosis.pm/safe-react-components"
-import BigNumber from "bignumber.js"
-import CPK from "contract-proxy-kit"
-import React, { useCallback, useMemo, useState } from "react"
-import cERC20Abi from "src/abis/CErc20.json"
-import { CDAI_ADDRESS, DAI_ADDRESS } from "src/contracts"
-import styled from "styled-components"
+import {
+  Button,
+  EthHashInfo,
+  Tab,
+  TabItem,
+  Text,
+  TextField
+} from '@gnosis.pm/safe-react-components'
+import BigNumber from 'bignumber.js'
+import CPK from 'contract-proxy-kit'
+import React, { useCallback, useMemo, useState } from 'react'
+import cERC20Abi from 'src/abis/CErc20.json'
+import { CDAI_ADDRESS, DAI_ADDRESS } from 'src/contracts'
+import styled from 'styled-components'
 
 interface ICompoundForm {
   web3: any
@@ -36,7 +43,6 @@ const TitleLine = styled.div`
   margin-right: 10px;
 `
 
-
 const formatNumber = (value: number) =>
   new BigNumber(value).div(DECIMALS_18).toFixed(4)
 
@@ -60,11 +66,11 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
   const cDai = useMemo(() => new web3.eth.Contract(cERC20Abi, CDAI_ADDRESS), [
     web3
   ])
-  const [cDaiSupplyAPR, setCDaiSupplyAPR] = useState<string>("0")
+  const [cDaiSupplyAPR, setCDaiSupplyAPR] = useState<string>('0')
   const [proxyDaiBalance, setProxyDaiBalance] = useState<number>(0)
   const [daiBalance, setDaiBalance] = useState<number>(0)
   const [cDaiLocked, setCDaiLocked] = useState<number>(0)
-  const [daiInputAmount, setDaiInputAmount] = useState<string>("")
+  const [daiInputAmount, setDaiInputAmount] = useState<string>('')
   const [selectedTab, setSelectedTab] = useState('1')
 
   const getData = useCallback(async () => {
@@ -111,7 +117,7 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
       {
         operation: CPK.Call,
         to: DAI_ADDRESS,
-        value: "0",
+        value: '0',
         data: dai.methods
           .approve(CDAI_ADDRESS, daiAmount.toString())
           .encodeABI()
@@ -119,7 +125,7 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
       {
         operation: CPK.Call,
         to: CDAI_ADDRESS,
-        value: "0",
+        value: '0',
         data: cDai.methods.mint(daiAmount.toString()).encodeABI()
       }
     ]
@@ -159,10 +165,10 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
 
     const txResult: any = await cpk.execTransactions(txs)
     await new Promise((resolve, reject) =>
-    txResult.promiEvent
-      ?.then((receipt: any) => resolve(receipt))
-      .catch(reject)
-  )
+      txResult.promiEvent
+        ?.then((receipt: any) => resolve(receipt))
+        .catch(reject)
+    )
     getData()
   }
 
@@ -194,9 +200,7 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
             Proxy Dai balance:
           </Text>
         </TitleLine>
-        <Text size="xl">
-        {formatNumber(proxyDaiBalance)}
-        </Text>
+        <Text size="xl">{formatNumber(proxyDaiBalance)}</Text>
       </Line>
       <Line>
         <TitleLine>
@@ -204,9 +208,7 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
             Dai APR:
           </Text>
         </TitleLine>
-        <Text size="xl">
-          {cDaiSupplyAPR}%
-        </Text>
+        <Text size="xl">{cDaiSupplyAPR}%</Text>
       </Line>
       <Line>
         <TitleLine>
@@ -215,8 +217,10 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
           </Text>
         </TitleLine>
         <Text size="xl">
-          {formatNumber(daiBalance)}
-          {' '}<a href="https://ethereum.stackexchange.com/a/80204" target="_blank">(Request Testnet DAI?)</a>
+          {formatNumber(daiBalance)}{' '}
+          <a href="https://ethereum.stackexchange.com/a/80204" target="_blank">
+            (Request Testnet DAI?)
+          </a>
         </Text>
       </Line>
       <Line>
@@ -225,9 +229,7 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
             DAI locked:
           </Text>
         </TitleLine>
-        <Text size="xl">
-          {formatNumber(cDaiLocked)}
-        </Text>
+        <Text size="xl">{formatNumber(cDaiLocked)}</Text>
       </Line>
       <br />
       <Tab
@@ -247,12 +249,7 @@ const CompoundForm: React.FC<ICompoundForm> = ({ web3, address, cpk }) => {
       />
       <br />
       {selectedTab === '1' && (
-        <Button
-          size="lg"
-          color="primary"
-          variant="contained"
-          onClick={lockDai}
-        >
+        <Button size="lg" color="primary" variant="contained" onClick={lockDai}>
           Invest
         </Button>
       )}

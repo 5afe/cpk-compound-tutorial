@@ -1,5 +1,5 @@
-import { EthHashInfo } from "@gnosis.pm/safe-react-components"
-import React from "react"
+import { EthHashInfo } from '@gnosis.pm/safe-react-components'
+import React from 'react'
 
 const AccountInfo: React.FC<{ address: string }> = ({ address }) => {
   if (!address) {

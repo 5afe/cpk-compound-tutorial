@@ -1,7 +1,7 @@
 import avertaBoldFont from '@gnosis.pm/safe-react-components/dist/fonts/averta-bold.woff2'
 import avertaFont from '@gnosis.pm/safe-react-components/dist/fonts/averta-normal.woff2'
-import { createGlobalStyle } from "styled-components"
-import { normalize } from "styled-normalize"
+import { createGlobalStyle } from 'styled-components'
+import { normalize } from 'styled-normalize'
 
 const GlobalStyles = createGlobalStyle`
   ${normalize}

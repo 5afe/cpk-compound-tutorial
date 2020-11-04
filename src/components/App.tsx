@@ -1,11 +1,11 @@
-import CPK, { Web3Adapter } from "contract-proxy-kit"
-import React, { useEffect } from "react"
-import SafeLogo from "src/assets/icons/safe-logo.svg"
-import CompoundForm from "src/components/CompoundForm"
-import ConnectButton from "src/components/ConnectButton"
-import WalletInfo from "src/components/WalletInfo"
-import styled from "styled-components"
-import Web3 from "web3"
+import CPK, { Web3Adapter } from 'contract-proxy-kit'
+import React, { useEffect } from 'react'
+import SafeLogo from 'src/assets/icons/safe-logo.svg'
+import CompoundForm from 'src/components/CompoundForm'
+import ConnectButton from 'src/components/ConnectButton'
+import WalletInfo from 'src/components/WalletInfo'
+import styled from 'styled-components'
+import Web3 from 'web3'
 
 const SAppContainer = styled.main`
   display: flex;
